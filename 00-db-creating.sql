@@ -1,0 +1,1 @@
+CREATE DATABASE IF NOT EXISTS sem3-course-work;
