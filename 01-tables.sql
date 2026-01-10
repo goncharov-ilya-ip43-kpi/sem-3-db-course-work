@@ -113,11 +113,28 @@ CREATE TABLE IF NOT EXISTS materials_tests (
 );
 
 -- 14
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_type t
+        JOIN pg_namespace n ON n.oid = t.typnamespace
+        WHERE t.typname = 'question_types'
+          AND n.nspname = 'public'
+    ) THEN
+        CREATE TYPE question_types AS ENUM (
+            'single',
+            'multi'
+        );
+    END IF;
+END $$;
+
 CREATE TABLE IF NOT EXISTS test_questions (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     test_id INT NOT NULL REFERENCES tests(id),
     name VARCHAR(100) NOT NULL,
     description VARCHAR(3000) NOT NULL,
+    type question_types NOT NULL,
     max_rate SMALLINT NOT NULL CHECK (max_rate >= 0)
 );
 
@@ -127,17 +144,12 @@ CREATE TABLE IF NOT EXISTS question_options (
     test_question_id INT NOT NULL REFERENCES test_questions(id),
     seq_id SMALLINT NOT NULL CHECK (seq_id > 0),
     option VARCHAR(3000) NOT NULL,
+    is_correct BOOLEAN NOT NULL,
 
     UNIQUE(test_question_id, seq_id)
 );
 
 -- 16
-CREATE TABLE IF NOT EXISTS question_answers (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    question_option_id INT NOT NULL UNIQUE REFERENCES question_options(id)
-);
-
--- 17
 CREATE TABLE IF NOT EXISTS done_tests (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     student_id INT NOT NULL REFERENCES students(id),
@@ -146,7 +158,7 @@ CREATE TABLE IF NOT EXISTS done_tests (
     passed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 18
+-- 17
 CREATE TABLE IF NOT EXISTS files (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     path TEXT NOT NULL,
@@ -158,7 +170,7 @@ CREATE TABLE IF NOT EXISTS files (
     UNIQUE (path, filename)
 );
 
--- 19
+-- 18
 CREATE TABLE IF NOT EXISTS options_files (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     question_option_id INT NOT NULL REFERENCES question_options(id),
@@ -167,7 +179,7 @@ CREATE TABLE IF NOT EXISTS options_files (
     UNIQUE (question_option_id, file_id)
 );
 
--- 20
+-- 19
 CREATE TABLE IF NOT EXISTS question_files (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     test_question_id INT NOT NULL REFERENCES test_questions(id),
@@ -176,7 +188,7 @@ CREATE TABLE IF NOT EXISTS question_files (
     UNIQUE (test_question_id, file_id)
 );
 
--- 21
+-- 20
 CREATE TABLE IF NOT EXISTS done_tasks_files (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     done_task_id INT NOT NULL REFERENCES done_tasks(id),
@@ -185,7 +197,7 @@ CREATE TABLE IF NOT EXISTS done_tasks_files (
     UNIQUE (done_task_id, file_id)
 );
 
--- 22
+-- 21
 CREATE TABLE IF NOT EXISTS material_files (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     material_id INT NOT NULL REFERENCES materials(id),
