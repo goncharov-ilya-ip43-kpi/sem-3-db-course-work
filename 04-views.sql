@@ -1,6 +1,6 @@
 -- CREATING
 
--- Отримати ПІБ усіх студентів і їхні навальні групи
+-- Отримати ПІБ усіх студентів і їхні навчальні групи
 CREATE VIEW v_students_by_groups AS
 SELECT
     u.last_name,
