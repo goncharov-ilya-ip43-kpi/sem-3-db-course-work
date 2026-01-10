@@ -1,0 +1,21 @@
+test_id,name,description,type,max_rate
+1,Variable Types,What are the basic data types in Python?,single,10
+1,Control Flow,Which statement is used for looping?,multi,10
+1,Function Definition,How do you define a function?,single,10
+2,Array Complexity,What is the time complexity of array access?,single,10
+2,Stack Operations,Which operations does a stack support?,multi,10
+2,Tree Traversal,What are the types of tree traversal?,multi,10
+3,SQL Basics,What does SQL stand for?,single,10
+3,Database Types,What are types of databases?,multi,10
+3,Primary Key,What is a primary key?,single,10
+4,Join Types,What are the types of SQL joins?,multi,10
+4,Indexing,Why do we use indexes?,single,10
+4,Optimization,What are query optimization techniques?,multi,10
+5,HTML Tags,What is the correct HTML tag for a paragraph?,single,10
+5,CSS Selectors,Which are valid CSS selectors?,multi,10
+5,Responsive Design,What is responsive web design?,single,10
+6,React Hooks,What are React hooks?,multi,10
+6,Virtual DOM,What is the Virtual DOM?,single,10
+6,State Management,What are state management solutions?,multi,10
+7,OSI Model,How many layers are in the OSI model?,single,10
+7,TCP vs UDP,What are differences between TCP and UDP?,multi,10

@@ -1,0 +1,21 @@
+topic_id,name,description
+1,Getting Started Guide,Step by step guide for beginners
+1,Variable Declaration Examples,Code examples showing different variable types
+2,If Statement Tutorial,Complete guide to conditional statements
+2,Loop Patterns,Common loop implementations and best practices
+3,Function Syntax Reference,Quick reference for function declarations
+3,Recursive Functions,Understanding recursion with examples
+4,Array Operations,Common array methods and operations
+4,List Comprehensions,Advanced list manipulation techniques
+5,Stack Implementation,Code example of stack data structure
+5,Queue Implementation,Code example of queue data structure
+6,Binary Tree Traversal,Different ways to traverse trees
+6,Graph Algorithms,Common graph algorithms like BFS and DFS
+7,SQL Introduction,Your first SQL queries
+7,Database Setup,How to install and configure a database
+8,Normalization Guide,Step by step normalization process
+8,ER Diagrams,Creating entity relationship diagrams
+9,ACID Properties Explained,Detailed explanation of transactions
+9,Transaction Examples,Practical transaction scenarios
+10,Complex Joins,Advanced join techniques
+10,Subquery Patterns,When and how to use subqueries

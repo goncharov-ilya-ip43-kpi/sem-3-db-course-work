@@ -1,0 +1,25 @@
+course_id,seq_id,name,description
+1,1,Variables and Data Types,Introduction to basic programming concepts including variables and data types
+1,2,Control Structures,Learn about if statements loops and conditional logic
+1,3,Functions and Methods,Understanding how to create and use functions
+2,1,Arrays and Lists,Working with linear data structures
+2,2,Stacks and Queues,Understanding LIFO and FIFO data structures
+2,3,Trees and Graphs,Advanced data structures for complex relationships
+3,1,Introduction to Databases,Overview of database concepts and SQL basics
+3,2,Relational Database Design,Learn about normalization and entity relationships
+3,3,Transactions and ACID,Understanding database transaction properties
+4,1,Advanced Query Techniques,Complex joins subqueries and CTEs
+4,2,Query Optimization,Performance tuning and indexing strategies
+4,3,Stored Procedures,Creating reusable database code
+5,1,HTML and CSS Basics,Building static web pages
+5,2,Responsive Design,Creating mobile-friendly websites
+5,3,CSS Frameworks,Using Bootstrap and Tailwind
+6,1,JavaScript ES6 Features,Modern JavaScript syntax and features
+6,2,React Components,Building user interfaces with React
+6,3,State Management,Redux and Context API
+7,1,Network Models,OSI and TCP IP models
+7,2,Routing Protocols,Understanding how packets travel
+7,3,Network Troubleshooting,Diagnosing network issues
+8,1,Security Fundamentals,Basics of information security
+8,2,Firewalls and VPNs,Network security technologies
+8,3,Intrusion Detection,Monitoring and preventing attacks
