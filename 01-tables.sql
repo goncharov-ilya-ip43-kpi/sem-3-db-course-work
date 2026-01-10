@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS course_access_lists (
 CREATE TABLE IF NOT EXISTS topics (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     course_id INT NOT NULL REFERENCES courses(id),
-    seq_id INT NOT NULL CHECK (seq_id > 0),
+    seq_id SERIAL NOT NULL CHECK (seq_id > 0),
     name VARCHAR(100) NOT NULL,
     description VARCHAR(3000)
 );
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS test_questions (
 CREATE TABLE IF NOT EXISTS question_options (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     test_question_id INT NOT NULL REFERENCES test_questions(id),
-    seq_id SMALLINT NOT NULL CHECK (seq_id > 0),
+    seq_id SERIAL NOT NULL CHECK (seq_id > 0),
     option VARCHAR(3000) NOT NULL,
     is_correct BOOLEAN NOT NULL,
 
