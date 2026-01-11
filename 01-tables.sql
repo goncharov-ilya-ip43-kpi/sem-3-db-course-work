@@ -82,7 +82,8 @@ CREATE TABLE IF NOT EXISTS materials (
 CREATE TABLE IF NOT EXISTS tasks (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     material_id INT NOT NULL REFERENCES materials(id),
-    max_rate SMALLINT NOT NULL CHECK (max_rate >= 0)
+    max_rate SMALLINT NOT NULL CHECK (max_rate >= 0),
+    deadline TIMESTAMP WITH TIME ZONE
 );
 
 -- 11

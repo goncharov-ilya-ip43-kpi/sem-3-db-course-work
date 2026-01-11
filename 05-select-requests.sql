@@ -19,7 +19,7 @@ JOIN topics tp ON tp.id = m.topic_id
 JOIN courses c ON c.id = tp.course_id
 ORDER BY c.name, tp.seq_id;
 
--- 3. Знайти студентів, які не здали жодного тесту (з підзапитом)
+-- 3. Знайти студентів, які не здали жодного тесту
 SELECT
     u.last_name || ' ' || u.first_name AS student_name,
     sg.name AS group_name
@@ -66,8 +66,8 @@ ORDER BY average_rate DESC;
 
 -- 7. Знайти викладачів, які мають права оцінювання на курсах інших викладачів
 SELECT
-    u1.last_name || ' ' || u1.first_name AS accessor_teacher,
     u2.last_name || ' ' || u2.first_name AS course_owner,
+    u1.last_name || ' ' || u1.first_name AS accessor_teacher,
     c.name AS course_name
 FROM course_access_lists cal
 JOIN teachers t1 ON t1.id = cal.teacher_id
@@ -157,7 +157,7 @@ JOIN courses c ON c.id = tp.course_id
 LEFT JOIN materials m ON m.topic_id = tp.id
 WHERE m.id IS NULL;
 
--- 15. Отримати студентів з балом вище середнього по їхній групі (з підзапитом)
+-- 15. Отримати студентів з балом вище середнього по їхній групі
 SELECT
     u.last_name || ' ' || u.first_name AS student_name,
     sg.name AS group_name,
@@ -188,7 +188,7 @@ JOIN topics tp ON tp.id = m.topic_id
 JOIN courses c ON c.id = tp.course_id
 ORDER BY c.name, tp.seq_id;
 
--- 17. Знайти тести з максимальною кількістю питань (з підзапитом)
+-- 17. Знайти тести з максимальною кількістю питань
 SELECT
     te.name AS test_name,
     COUNT(tq.id) AS questions_count
@@ -215,7 +215,7 @@ JOIN material_files mf ON mf.file_id = f.id
 GROUP BY f.mime_type
 ORDER BY total_size_bytes DESC;
 
--- 19. Показати курси та кількість їхніх активних тестів з дедлайнами
+-- 19. Показати курси та кількість їхні активні тести з дедлайнами
 SELECT
     c.name AS course_name,
     COUNT(DISTINCT mt.test_id) AS active_tests_count,

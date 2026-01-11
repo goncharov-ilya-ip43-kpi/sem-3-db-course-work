@@ -7,7 +7,7 @@
 \copy course_access_lists(teacher_id,course_id,rate,write,manage_students) FROM './data/07-course_access_lists.csv' WITH (FORMAT csv, HEADER true);
 \copy topics(course_id,seq_id,name,description) FROM './data/08-topics.csv' WITH (FORMAT csv, HEADER true);
 \copy materials(topic_id,name,description) FROM './data/09-materials.csv' WITH (FORMAT csv, HEADER true);
-\copy tasks(material_id,max_rate) FROM './data/10-tasks.csv' WITH (FORMAT csv, HEADER true);
+\copy tasks(material_id,max_rate,deadline) FROM './data/10-tasks.csv' WITH (FORMAT csv, HEADER true);
 \copy done_tasks(task_id,student_id,rate) FROM './data/11-done_tasks.csv' WITH (FORMAT csv, HEADER true);
 \copy tests(name) FROM './data/12-tests.csv' WITH (FORMAT csv, HEADER true);
 \copy materials_tests(material_id,test_id,max_rate,deadline) FROM './data/13-materials_tests.csv' WITH (FORMAT csv, HEADER true);
