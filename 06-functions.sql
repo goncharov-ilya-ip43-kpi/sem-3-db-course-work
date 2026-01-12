@@ -26,31 +26,35 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Повертає кількість непрочитаних матеріалів студента по курсу
-CREATE OR REPLACE FUNCTION get_unread_materials_count(p_student_id INT, p_course_id INT)
-RETURNS INT AS $$
+-- Повертає кількість матеріалів з незданими завданнями або тестами
+CREATE OR REPLACE FUNCTION get_incomplete_materials_count(p_student_id INT, p_course_id INT)
+RETURNS INT AS $
 DECLARE
-    unread_count INT;
+    incomplete_count INT;
 BEGIN
     SELECT COUNT(DISTINCT m.id)
-    INTO unread_count
+    INTO incomplete_count
     FROM materials m
     JOIN topics tp ON tp.id = m.topic_id
     JOIN courses c ON c.id = tp.course_id
-    JOIN courses_study_groups csg ON csg.course_id = c.id
-    JOIN students s ON s.study_group_id = csg.study_group_id
-    LEFT JOIN tasks tsk ON tsk.material_id = m.id
-    LEFT JOIN done_tasks dt ON dt.task_id = tsk.id AND dt.student_id = s.id
-    LEFT JOIN materials_tests mt ON mt.material_id = m.id
-    LEFT JOIN done_tests dtest ON dtest.material_tests_id = mt.id AND dtest.student_id = s.id
-    WHERE s.id = p_student_id 
-        AND c.id = p_course_id
-        AND dt.id IS NULL 
-        AND dtest.id IS NULL;
+    WHERE c.id = p_course_id
+        AND (
+            EXISTS (
+                SELECT 1 FROM tasks t
+                LEFT JOIN done_tasks dt ON dt.task_id = t.id AND dt.student_id = p_student_id
+                WHERE t.material_id = m.id AND dt.id IS NULL
+            )
+            OR
+            EXISTS (
+                SELECT 1 FROM materials_tests mt
+                LEFT JOIN done_tests dtest ON dtest.material_tests_id = mt.id AND dtest.student_id = p_student_id
+                WHERE mt.material_id = m.id AND dtest.id IS NULL
+            )
+        );
     
-    RETURN unread_count;
+    RETURN incomplete_count;
 END;
-$$ LANGUAGE plpgsql;
+$ LANGUAGE plpgsql;
 
 -- Перевіряє чи студент має доступ до курсу
 CREATE OR REPLACE FUNCTION check_student_course_access(p_student_id INT, p_course_id INT)
@@ -88,7 +92,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Повертає список студентів групи з їхніми email-адресами
+-- Повертає список студентів групи
 CREATE OR REPLACE FUNCTION get_group_students_info(p_study_group_id INT)
 RETURNS TABLE(
     student_id INT,
@@ -97,7 +101,7 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         s.id,
         u.last_name || ' ' || u.first_name || ' ' || u.patronymic,
         u.login
@@ -114,17 +118,12 @@ $$ LANGUAGE plpgsql;
 
 
 
--- Тест функції обчислення загального балу студента
 SELECT get_student_course_total_rate(1, 1) AS total_rate;
 
--- Тест функції підрахунку непрочитаних матеріалів
-SELECT get_unread_materials_count(1, 1) AS unread_materials;
+SELECT get_incomplete_materials_count(1, 1) AS incomplete_materials;
 
--- Тест функції перевірки доступу студента до курсу
 SELECT check_student_course_access(1, 1) AS has_access;
 
--- Тест функції обчислення максимального балу курсу
 SELECT get_course_max_rate(1) AS max_course_rate;
 
--- Тест функції отримання інформації про студентів групи
 SELECT * FROM get_group_students_info(1);

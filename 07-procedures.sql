@@ -97,7 +97,7 @@ BEGIN
 END;
 $$;
 
--- Оновлює семестр для всіх студентів групи
+-- Оновлює семестр для групи
 CREATE OR REPLACE PROCEDURE update_group_semester(
     p_study_group_id INT,
     p_new_semester SMALLINT
