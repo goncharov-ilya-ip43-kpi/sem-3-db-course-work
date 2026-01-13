@@ -36,11 +36,7 @@ GRANT SELECT, INSERT, UPDATE ON
 TO role_teacher;
 
 GRANT SELECT, INSERT ON
-    files,
-    material_files,
-    question_files,
-    options_files,
-    done_tasks_files
+    files
 TO role_teacher;
 
 -- Granting permissions for students on tables
@@ -54,17 +50,13 @@ GRANT SELECT ON
     tests,
     materials_tests,
     test_questions,
-    question_options,
-    files,
-    material_files,
-    question_files,
-    options_files
+    question_options
 TO role_student;
 
 GRANT SELECT, INSERT ON
     done_tasks,
     done_tests,
-    done_tasks_files
+    files
 TO role_student;
 
 -- Granting permissions on views

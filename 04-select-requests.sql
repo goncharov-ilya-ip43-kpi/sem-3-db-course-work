@@ -38,10 +38,10 @@ SELECT
     f.filename,
     f.mime_type,
     f.size_bytes
-FROM question_files qf
-JOIN test_questions tq ON tq.id = qf.test_question_id
+FROM files f
+JOIN test_questions tq ON tq.id = f.test_question_id
 JOIN tests te ON te.id = tq.test_id
-JOIN files f ON f.id = qf.file_id;
+WHERE f.test_question_id IS NOT NULL;
 
 -- 5. Показати тести з прострочених матеріалів
 SELECT
@@ -92,13 +92,13 @@ SELECT
     m.name AS material_name,
     f.filename,
     f.created_at
-FROM done_tasks_files dtf
-JOIN done_tasks dt ON dt.id = dtf.done_task_id
+FROM files f
+JOIN done_tasks dt ON dt.id = f.done_task_id
 JOIN students s ON s.id = dt.student_id
 JOIN users u ON u.id = s.user_id
 JOIN tasks t ON t.id = dt.task_id
 JOIN materials m ON m.id = t.material_id
-JOIN files f ON f.id = dtf.file_id;
+WHERE f.done_task_id IS NOT NULL;
 
 -- 10. Показати варіанти відповідей із прикріпленими файлами
 SELECT
@@ -106,10 +106,10 @@ SELECT
     qo.option AS option_text,
     f.filename,
     f.mime_type
-FROM options_files of
-JOIN question_options qo ON qo.id = of.question_option_id
+FROM files f
+JOIN question_options qo ON qo.id = f.question_option_id
 JOIN test_questions tq ON tq.id = qo.test_question_id
-JOIN files f ON f.id = of.file_id;
+WHERE f.question_option_id IS NOT NULL;
 
 -- 11. Знайти курси без жодної призначеної групи
 SELECT
@@ -181,11 +181,11 @@ SELECT
     m.name AS material_name,
     f.filename,
     f.size_bytes
-FROM material_files mf
-JOIN materials m ON m.id = mf.material_id
-JOIN files f ON f.id = mf.file_id
+FROM files f
+JOIN materials m ON m.id = f.material_id
 JOIN topics tp ON tp.id = m.topic_id
 JOIN courses c ON c.id = tp.course_id
+WHERE f.material_id IS NOT NULL
 ORDER BY c.name, tp.seq_id;
 
 -- 17. Знайти тести з максимальною кількістю питань
@@ -211,7 +211,7 @@ SELECT
     SUM(f.size_bytes) AS total_size_bytes,
     ROUND(SUM(f.size_bytes) / 1024.0 / 1024.0, 2) AS total_size_mb
 FROM files f
-JOIN material_files mf ON mf.file_id = f.id
+WHERE f.material_id IS NOT NULL
 GROUP BY f.mime_type
 ORDER BY total_size_bytes DESC;
 

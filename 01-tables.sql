@@ -167,42 +167,17 @@ CREATE TABLE IF NOT EXISTS files (
     mime_type VARCHAR(100) NOT NULL,
     size_bytes BIGINT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    question_option_id INT REFERENCES question_options(id)
+    test_question_id INT REFERENCES test_questions(id),
+    done_task_id INT REFERENCES done_tasks(id),
+    material_id INT REFERENCES materials(id),
 
-    UNIQUE (path, filename)
-);
-
--- 18
-CREATE TABLE IF NOT EXISTS options_files (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    question_option_id INT NOT NULL REFERENCES question_options(id),
-    file_id INT NOT NULL REFERENCES files(id),
-
-    UNIQUE (question_option_id, file_id)
-);
-
--- 19
-CREATE TABLE IF NOT EXISTS question_files (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    test_question_id INT NOT NULL REFERENCES test_questions(id),
-    file_id INT NOT NULL REFERENCES files(id),
-
-    UNIQUE (test_question_id, file_id)
-);
-
--- 20
-CREATE TABLE IF NOT EXISTS done_tasks_files (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    done_task_id INT NOT NULL REFERENCES done_tasks(id),
-    file_id INT NOT NULL REFERENCES files(id),
-
-    UNIQUE (done_task_id, file_id)
-);
-
--- 21
-CREATE TABLE IF NOT EXISTS material_files (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    material_id INT NOT NULL REFERENCES materials(id),
-    file_id INT NOT NULL REFERENCES files(id),
-
-    UNIQUE (material_id, file_id)
+    UNIQUE (path, filename),
+    CHECK (
+        (question_option_id IS NOT NULL)::int +
+        (test_question_id IS NOT NULL)::int +
+        (done_task_id IS NOT NULL)::int +
+        (material_id IS NOT NULL)::int
+        <= 1
+    )
 );

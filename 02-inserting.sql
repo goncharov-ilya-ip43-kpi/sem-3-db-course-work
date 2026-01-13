@@ -14,8 +14,4 @@
 \copy test_questions(test_id,name,description,type,max_rate) FROM './data/14-test_questions.csv' WITH (FORMAT csv, HEADER true);
 \copy question_options(test_question_id,seq_id,option,is_correct) FROM './data/15-question_options.csv' WITH (FORMAT csv, HEADER true);
 \copy done_tests(student_id,material_tests_id,rate,passed_at) FROM './data/16-done_tests.csv' WITH (FORMAT csv, HEADER true);
-\copy files(path,filename,mime_type,size_bytes,created_at) FROM './data/17-files.csv' WITH (FORMAT csv, HEADER true);
-\copy options_files(question_option_id,file_id) FROM './data/18-options_files.csv' WITH (FORMAT csv, HEADER true);
-\copy question_files(test_question_id,file_id) FROM './data/19-question_files.csv' WITH (FORMAT csv, HEADER true);
-\copy done_tasks_files(done_task_id,file_id) FROM './data/20-done_tasks_files.csv' WITH (FORMAT csv, HEADER true);
-\copy material_files(material_id,file_id) FROM './data/21-material_files.csv' WITH (FORMAT csv, HEADER true);
+\copy files(path,filename,mime_type,size_bytes,created_at,question_option_id,test_question_id,done_task_id,material_id) FROM './data/17-files.csv' WITH (FORMAT csv, HEADER true);
