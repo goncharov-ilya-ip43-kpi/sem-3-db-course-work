@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS files (
     mime_type VARCHAR(100) NOT NULL,
     size_bytes BIGINT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    question_option_id INT REFERENCES question_options(id)
+    question_option_id INT REFERENCES question_options(id),
     test_question_id INT REFERENCES test_questions(id),
     done_task_id INT REFERENCES done_tasks(id),
     material_id INT REFERENCES materials(id),

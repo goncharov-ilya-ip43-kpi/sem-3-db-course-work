@@ -59,14 +59,4 @@ GRANT SELECT, INSERT ON
     files
 TO role_student;
 
--- Granting permissions on views
-GRANT SELECT ON
-    v_students_by_groups,
-    v_courses_for_groups
-TO role_teacher;
-
-GRANT SELECT ON
-    v_student_learning_results
-TO role_teacher, role_student;
-
 COMMIT;
