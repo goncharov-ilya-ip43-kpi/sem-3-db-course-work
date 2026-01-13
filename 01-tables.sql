@@ -1,7 +1,7 @@
 -- 1
 CREATE TABLE IF NOT EXISTS users (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    login VARCHAR(30) NOT NULL UNIQUE CHECK(length(name) >= 2),
+    login VARCHAR(30) NOT NULL UNIQUE CHECK(length(login) >= 2),
     password TEXT NOT NULL,
     first_name VARCHAR(30) NOT NULL CHECK(length(first_name) >= 2),
     last_name VARCHAR(30) NOT NULL CHECK(length(last_name) >= 3),
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     material_id INT NOT NULL REFERENCES materials(id),
     max_rate SMALLINT NOT NULL CHECK(max_rate >= 0),
-    deadline TIMESTAMP WITH TIME ZONE CHECK(deadline > NOW())
+    deadline TIMESTAMP WITH TIME ZONE NOT NULL CHECK(deadline > NOW())
 );
 
 -- 11
@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS done_tasks (
     task_id INT NOT NULL REFERENCES tasks(id),
     student_id INT NOT NULL REFERENCES students(id),
     rate SMALLINT CHECK(rate >= 0),
+    passed_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 
     UNIQUE (task_id, student_id)
 );
@@ -108,7 +109,7 @@ CREATE TABLE IF NOT EXISTS materials_tests (
     material_id INT NOT NULL REFERENCES materials(id),
     test_id INT NOT NULL REFERENCES tests(id),
     max_rate SMALLINT NOT NULL CHECK (max_rate >= 0),
-    deadline TIMESTAMP WITH TIME ZONE CHECK(deadline > NOW()),
+    deadline TIMESTAMP WITH TIME ZONE NOT NULL CHECK(deadline > NOW()),
 
     UNIQUE (material_id, test_id)
 );
@@ -144,7 +145,7 @@ CREATE TABLE IF NOT EXISTS question_options (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     test_question_id INT NOT NULL REFERENCES test_questions(id),
     seq_id SERIAL NOT NULL CHECK (seq_id > 0),
-    option VARCHAR(3000) NOT NULL CHECK(length(name) >= 1),
+    option VARCHAR(3000) NOT NULL CHECK(length(option) >= 1),
     is_correct BOOLEAN NOT NULL,
 
     UNIQUE(test_question_id, seq_id)
@@ -155,8 +156,8 @@ CREATE TABLE IF NOT EXISTS done_tests (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     student_id INT NOT NULL REFERENCES students(id),
     material_tests_id INT NOT NULL REFERENCES materials_tests(id),
-    rate SMALLINT CHECK (rate >= 0),
-    passed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    rate SMALLINT NOT NULL CHECK (rate >= 0),
+    passed_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- 17

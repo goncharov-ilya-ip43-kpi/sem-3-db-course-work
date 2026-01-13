@@ -1,6 +1,6 @@
 BEGIN;
 
--- Creating roles and users
+-- Створення ролей і користувачів
 CREATE ROLE role_teacher;
 CREATE ROLE role_student;
 
@@ -10,7 +10,7 @@ CREATE USER student_user WITH PASSWORD 'student_pass';
 GRANT role_teacher TO teacher_user;
 GRANT role_student TO student_user;
 
--- Granting permissions for teachers on tables
+-- Видання дозволів викладачам
 GRANT SELECT ON
     users,
     study_groups,
@@ -39,7 +39,7 @@ GRANT SELECT, INSERT ON
     files
 TO role_teacher;
 
--- Granting permissions for students on tables
+-- Видання дозволів студентам
 GRANT SELECT ON
     study_groups,
     courses,

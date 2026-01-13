@@ -1,4 +1,6 @@
--- CREATING
+-- СТВОРЕННЯ
+
+
 
 -- Отримати ПІБ усіх студентів і їхні навчальні групи
 CREATE VIEW v_students_by_groups AS
@@ -51,7 +53,12 @@ LEFT JOIN done_tests dtest ON dtest.material_tests_id = mt.id AND dtest.student_
 GROUP BY
     s.id, u.last_name, u.first_name, c.id, c.name;
 
--- Executing
+
+
+-- ТЕСТУВАННЯ
+
+
+
 SELECT * FROM v_students_by_groups;
 SELECT * FROM v_courses_for_groups;
 SELECT * FROM v_student_learning_results;
