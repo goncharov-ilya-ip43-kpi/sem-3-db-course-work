@@ -1,17 +1,17 @@
 -- 1
 CREATE TABLE IF NOT EXISTS users (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    login VARCHAR(30) NOT NULL UNIQUE,
+    login VARCHAR(30) NOT NULL UNIQUE CHECK(length(name) >= 2),
     password TEXT NOT NULL,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    patronymic VARCHAR(30) NOT NULL
+    first_name VARCHAR(30) NOT NULL CHECK(length(first_name) >= 2),
+    last_name VARCHAR(30) NOT NULL CHECK(length(last_name) >= 3),
+    patronymic VARCHAR(30) NOT NULL CHECK(length(patronymic) >= 3)
 );
 
 -- 2
 CREATE TABLE IF NOT EXISTS study_groups (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(10) NOT NULL UNIQUE,
+    name VARCHAR(10) NOT NULL UNIQUE CHECK(length(name) >= 2),
     semester SMALLINT NOT NULL CHECK(semester > 0 AND semester < 20)
 );
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS teachers (
 CREATE TABLE IF NOT EXISTS courses (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     teacher_id INT NOT NULL REFERENCES teachers(id),
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL CHECK(length(name) >= 5)
 );
 
 -- 6
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS topics (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     course_id INT NOT NULL REFERENCES courses(id),
     seq_id SERIAL NOT NULL CHECK (seq_id > 0),
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL CHECK(length(name) >= 5),
     description VARCHAR(3000)
 );
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS topics (
 CREATE TABLE IF NOT EXISTS materials (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     topic_id INT NOT NULL REFERENCES topics(id),
-    name VARCHAR(100),
+    name VARCHAR(100) NOT NULL CHECK(length(name) >= 5),
     description VARCHAR(3000),
 
     UNIQUE(topic_id, name)
@@ -82,8 +82,8 @@ CREATE TABLE IF NOT EXISTS materials (
 CREATE TABLE IF NOT EXISTS tasks (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     material_id INT NOT NULL REFERENCES materials(id),
-    max_rate SMALLINT NOT NULL CHECK (max_rate >= 0),
-    deadline TIMESTAMP WITH TIME ZONE
+    max_rate SMALLINT NOT NULL CHECK(max_rate >= 0),
+    deadline TIMESTAMP WITH TIME ZONE CHECK(deadline > NOW())
 );
 
 -- 11
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS done_tasks (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     task_id INT NOT NULL REFERENCES tasks(id),
     student_id INT NOT NULL REFERENCES students(id),
-    rate SMALLINT CHECK (rate >= 0),
+    rate SMALLINT CHECK(rate >= 0),
 
     UNIQUE (task_id, student_id)
 );
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS done_tasks (
 -- 12
 CREATE TABLE IF NOT EXISTS tests (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL CHECK(length(name) >= 5)
 );
 
 -- 13
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS materials_tests (
     material_id INT NOT NULL REFERENCES materials(id),
     test_id INT NOT NULL REFERENCES tests(id),
     max_rate SMALLINT NOT NULL CHECK (max_rate >= 0),
-    deadline TIMESTAMP WITH TIME ZONE,
+    deadline TIMESTAMP WITH TIME ZONE CHECK(deadline > NOW()),
 
     UNIQUE (material_id, test_id)
 );
@@ -133,10 +133,10 @@ END $$;
 CREATE TABLE IF NOT EXISTS test_questions (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     test_id INT NOT NULL REFERENCES tests(id),
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL CHECK(length(name) >= 5),
     description VARCHAR(3000) NOT NULL,
     type question_types NOT NULL,
-    max_rate SMALLINT NOT NULL CHECK (max_rate >= 0)
+    max_rate SMALLINT NOT NULL CHECK(max_rate >= 0)
 );
 
 -- 15
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS question_options (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     test_question_id INT NOT NULL REFERENCES test_questions(id),
     seq_id SERIAL NOT NULL CHECK (seq_id > 0),
-    option VARCHAR(3000) NOT NULL,
+    option VARCHAR(3000) NOT NULL CHECK(length(name) >= 1),
     is_correct BOOLEAN NOT NULL,
 
     UNIQUE(test_question_id, seq_id)

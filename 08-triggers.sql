@@ -89,23 +89,6 @@ FOR EACH ROW
 EXECUTE FUNCTION trg_single_question_one_correct();
 
 
--- Забороняє додавання матеріалу без назви
-CREATE OR REPLACE FUNCTION trg_material_name_required()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.name IS NULL OR LENGTH(TRIM(NEW.name)) = 0 THEN
-        RAISE EXCEPTION 'Material name is required';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER material_name_required
-BEFORE INSERT OR UPDATE ON materials
-FOR EACH ROW
-EXECUTE FUNCTION trg_material_name_required();
-
-
 
 -- Тестування
 
@@ -123,5 +106,3 @@ VALUES (1, 1, 10);
 INSERT INTO question_options (test_question_id, seq_id, option, is_correct)
 VALUES (1, 1, 'A', TRUE);
 
-INSERT INTO materials (topic_id, name)
-VALUES (1, '');
