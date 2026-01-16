@@ -28,7 +28,7 @@ $$ LANGUAGE plpgsql;
 
 -- Повертає кількість матеріалів з незданими завданнями або тестами
 CREATE OR REPLACE FUNCTION get_incomplete_materials_count(p_student_id INT, p_course_id INT)
-RETURNS INT AS $
+RETURNS INT AS $$
 DECLARE
     incomplete_count INT;
 BEGIN
@@ -54,7 +54,7 @@ BEGIN
     
     RETURN incomplete_count;
 END;
-$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 -- Перевіряє чи студент має доступ до курсу
 CREATE OR REPLACE FUNCTION check_student_course_access(p_student_id INT, p_course_id INT)

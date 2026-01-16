@@ -228,7 +228,7 @@ WHERE mt.deadline > NOW()
 GROUP BY c.id, c.name
 ORDER BY nearest_deadline;
 
--- 20. Знайти курси, де є завдання з максимальним балом вище за середній (з підзапитом)
+-- 20. Знайти курси, де є завдання з максимальним балом вище за середній
 SELECT
     c.name AS course_name,
     u.last_name || ' ' || u.first_name AS teacher_name,

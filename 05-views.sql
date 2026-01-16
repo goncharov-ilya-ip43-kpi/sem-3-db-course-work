@@ -14,7 +14,7 @@ FROM students s
 JOIN users u ON u.id = s.user_id
 JOIN study_groups sg ON sg.id = s.study_group_id;
 
--- Отрмати курси, призначені групи і ПІБ викладачів
+-- Отримати курси, призначені групи і ПІБ викладачів
 CREATE VIEW v_courses_for_groups AS
 SELECT
     c.id AS course_id,
@@ -27,7 +27,7 @@ JOIN teachers t ON t.id = c.teacher_id
 JOIN users u ON u.id = t.user_id
 JOIN courses_study_groups csg ON csg.course_id = c.id
 JOIN study_groups sg ON sg.id = csg.study_group_id
-GROUP BY c.id, c.name, u.last_name, u.first_name;;
+GROUP BY c.id, c.name, u.last_name, u.first_name;
 
 -- Отримати результати навчання студентів
 CREATE VIEW v_student_learning_results AS

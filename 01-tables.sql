@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS course_access_lists (
     UNIQUE (teacher_id, course_id)
 );
 
-
 -- 8
 CREATE TABLE IF NOT EXISTS topics (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

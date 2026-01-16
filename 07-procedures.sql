@@ -53,47 +53,26 @@ BEGIN
 END;
 $$;
 
--- Видаляє всі матеріали теми разом з пов'язаними даними
-CREATE OR REPLACE PROCEDURE delete_topic_with_materials(p_topic_id INT)
+-- Рахує кількість файлів, що належать до матеріалів чи питань тесту
+CREATE OR REPLACE PROCEDURE count_files_for_material_or_test(
+    p_material_id INT DEFAULT NULL,
+    p_test_question_id INT DEFAULT NULL
+)
 LANGUAGE plpgsql AS $$
 DECLARE
-    v_materials_count INT;
+    v_files_count INT;
 BEGIN
-    SELECT COUNT(*) INTO v_materials_count
-    FROM materials
-    WHERE topic_id = p_topic_id;
-    
-    DELETE FROM done_tasks
-    WHERE task_id IN (
-        SELECT t.id FROM tasks t
-        JOIN materials m ON m.id = t.material_id
-        WHERE m.topic_id = p_topic_id
-    );
-    
-    DELETE FROM done_tests
-    WHERE material_tests_id IN (
-        SELECT mt.id FROM materials_tests mt
-        JOIN materials m ON m.id = mt.material_id
-        WHERE m.topic_id = p_topic_id
-    );
-    
-    DELETE FROM tasks
-    WHERE material_id IN (
-        SELECT id FROM materials WHERE topic_id = p_topic_id
-    );
-    
-    DELETE FROM materials_tests
-    WHERE material_id IN (
-        SELECT id FROM materials WHERE topic_id = p_topic_id
-    );
-    
-    DELETE FROM materials
-    WHERE topic_id = p_topic_id;
-    
-    DELETE FROM topics
-    WHERE id = p_topic_id;
-    
-    RAISE NOTICE 'Видалено тему разом з % матеріалами', v_materials_count;
+    IF p_material_id IS NULL AND p_test_question_id IS NULL THEN
+        RAISE NOTICE 'Потрібно вказати material_id або test_question_id';
+        RETURN;
+    END IF;
+
+    SELECT COUNT(*) INTO v_files_count
+    FROM files
+    WHERE (material_id = p_material_id OR p_material_id IS NULL)
+      AND (test_question_id = p_test_question_id OR p_test_question_id IS NULL);
+
+    RAISE NOTICE 'Знайдено % файлів', v_files_count;
 END;
 $$;
 
@@ -143,8 +122,8 @@ CALL add_student_to_group('test_student', 'password123', 'Іван', 'Петре
 
 CALL transfer_student_to_group(1, 2);
 
-CALL delete_topic_with_materials(1);
+CALL count_files_for_material_or_test(p_material_id => 1, p_test_question_id => NULL);
 
-CALL update_group_semester(1, 3);
+CALL update_group_semester(1, 3::smallint);
 
 CALL assign_course_to_group(1, 1);
